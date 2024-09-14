@@ -1,7 +1,17 @@
 h1 {
     font-family: 'Press Start 2P', sans-serif;
     font-size: 30px;
+    text-align: center;
     text-shadow: 5px 5px 10px rgba(242, 39, 210, 0.2);
+}
+
+#controls{
+    text-align: center;
+    padding: 50px;
+}
+
+#options{
+    text-align: center;
 }
 
 #sudoku-grid{
