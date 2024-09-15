@@ -27,16 +27,26 @@ function createGrid() {
             cell.type = 'text';
             cell.id = `cell-${row}-${col}`;
             cell.className = 'cell';
+            cell.maxLength = 1;
 
 
             if (startingGrid[row][col] !== null) {
                 cell.value = startingGrid[row][col];
                 cell.readOnly = true;
+            } else {
+                cell.addEventListener('input', function () {
+                    const value = cell.value;
+                    if (!/^[1-9]$/.test(value)) {
+                        cell.value = '';
+                    }
+                });
             }
 
             grid.appendChild(cell);
         }
     }
 }
+
+
 
 document.addEventListener('DOMContentLoaded', createGrid);
