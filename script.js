@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
     const newGameButton = document.getElementById('new-game');
+    const checkButton = document.getElementById('check-solutions');
+    const resetButton = document.getElementById('reset-game');
+
     newGameButton.addEventListener('click', function () {
         console.log('New Game button clicked!');
     });
 
-
-    const checkButton = document.getElementById('check-solution');
     checkButton.addEventListener('click', function () {
         if (isValid()) {
             alert('No duplicates found! Keep going!');
@@ -14,8 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-
-    const resetButton = document.getElementById('reset-game');
     resetButton.addEventListener('click', function () {
         resetGame();
     });
