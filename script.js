@@ -3,6 +3,25 @@ document.addEventListener('DOMContentLoaded', function () {
     newGameButton.addEventListener('click', function () {
         console.log('New Game button clicked!');
     });
+
+
+    const checkButton = document.getElementById('check-solution');
+    checkButton.addEventListener('click', function () {
+        if (isValid()) {
+            alert('No duplicates found! Keep going!');
+        } else {
+            alert('There are duplicates in your solution.');
+        }
+    });
+
+
+    const resetButton = document.getElementById('reset-game');
+    resetButton.addEventListener('click', function () {
+        resetGame();
+    });
+
+
+    createGrid();
 });
 
 function createGrid() {
@@ -29,7 +48,6 @@ function createGrid() {
             cell.className = 'cell';
             cell.maxLength = 1;
 
-
             if (startingGrid[row][col] !== null) {
                 cell.value = startingGrid[row][col];
                 cell.readOnly = true;
@@ -47,6 +65,69 @@ function createGrid() {
     }
 }
 
+function isValid() {
+    let gridValues = [];
+    for (let row = 0; row < 9; row++) {
+        gridValues[row] = [];
+        for (let col = 0; col < 9; col++) {
+            const cellId = `cell-${row}-${col}`;
+            const cell = document.getElementById(cellId);
+            const value = parseInt(cell.value) || null;
+            gridValues[row][col] = value;
+        }
+    }
+
+    for (let i = 0; i < 9; i++) {
+        const rowSet = new Set();
+        const colSet = new Set();
+        for (let j = 0; j < 9; j++) {
 
 
-document.addEventListener('DOMContentLoaded', createGrid);
+            if (gridValues[i][j]) {
+                if (rowSet.has(gridValues[i][j])) {
+                    return false;
+                }
+                rowSet.add(gridValues[i][j]);
+            }
+
+
+            if (gridValues[j][i]) {
+                if (colSet.has(gridValues[j][i])) {
+                    return false;
+                }
+                colSet.add(gridValues[j][i]);
+            }
+        }
+    }
+
+
+    for (let row = 0; row < 9; row += 3) {
+        for (let col = 0; col < 9; col += 3) {
+            const boxSet = new Set();
+            for (let i = row; i < row + 3; i++) {
+                for (let j = col; j < col + 3; j++) {
+                    if (gridValues[i][j]) {
+                        if (boxSet.has(gridValues[i][j])) {
+                            return false;
+                        }
+                        boxSet.add(gridValues[i][j]);
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+function resetGame() {
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            const cellId = `cell-${row}-${col}`;
+            const cell = document.getElementById(cellId);
+            if (!cell.readOnly) {
+                cell.value = '';
+            }
+        }
+    }
+}
