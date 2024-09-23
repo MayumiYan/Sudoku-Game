@@ -5,31 +5,56 @@ h1 {
     text-shadow: 5px 5px 10px rgba(242, 39, 210, 0.2);
 }
 
-#controls{
+#controls {
     text-align: center;
     padding: 50px;
 }
 
-#options{
+#options {
     text-align: center;
 }
 
-#sudoku-grid{
+
+#sudoku-grid {
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: repeat(9, 1fr);
-    gap: 1px;
-    width: 300px;
-    height: 300px;
-    max-width: 100%;
-    margin: 0 auto;
+    grid-template-columns: repeat(9, 40px);  
+    grid-template-rows: repeat(9, 40px);    
+    gap: 0;
+    margin: 20px auto;
+    width: 360px;
+    display: block;
 }
 
 .cell {
-    width: 100%;
-    padding: 0;
+    width: 40px;
+    height: 40px;
     text-align: center;
     font-size: 17px;
-     font-family: 'Press Start 2P', sans-serif;
-     box-sizing: 20px;
+    font-family: 'Press Start 2P', sans-serif;
+    box-sizing: border-box;
+    border: 1px solid black;
+}
+
+
+.cell:nth-child(3n+1) {
+    border-left: 3px solid rgb(223, 156, 236);
+}
+
+
+.cell:nth-child(3n) {
+    border-right: 3px solid rgb(223, 156, 236);
+}
+
+
+.cell:nth-child(-n+9),
+.cell:nth-child(n+28):nth-child(-n+36),
+.cell:nth-child(n+55):nth-child(-n+63) {
+    border-top: 3px solid rgb(223, 156, 236);
+}
+
+
+.cell:nth-child(n+19):nth-child(-n+27),
+.cell:nth-child(n+46):nth-child(-n+54),
+.cell:nth-child(n+73):nth-child(-n+81) {
+    border-bottom: 3px solid rgb(223, 156, 236);
 }
