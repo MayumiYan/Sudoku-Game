@@ -66,6 +66,8 @@ function createGrid() {
 
 function isValid() {
     let gridValues = [];
+    let duplicateFound = false;
+
     for (let row = 0; row < 9; row++) {
         gridValues[row] = [];
         for (let col = 0; col < 9; col++) {
@@ -84,21 +86,26 @@ function isValid() {
 
             if (gridValues[i][j]) {
                 if (rowSet.has(gridValues[i][j])) {
-                    return false;
+                    const cell = document.getElementById(`cell-${i}-${j}`);
+                    cell.style.backgroundColor = "red";
+                    duplicateFound = true;
+                } else {
+                    rowSet.add(gridValues[i][j]);
                 }
-                rowSet.add(gridValues[i][j]);
             }
 
 
             if (gridValues[j][i]) {
                 if (colSet.has(gridValues[j][i])) {
-                    return false;
+                    const cell = document.getElementById(`cell-${j}-${i}`);
+                    cell.style.backgroundColor = "red";
+                    duplicateFound = true;
+                } else {
+                    colSet.add(gridValues[j][i]);
                 }
-                colSet.add(gridValues[j][i]);
             }
         }
     }
-
 
     for (let row = 0; row < 9; row += 3) {
         for (let col = 0; col < 9; col += 3) {
@@ -107,16 +114,19 @@ function isValid() {
                 for (let j = col; j < col + 3; j++) {
                     if (gridValues[i][j]) {
                         if (boxSet.has(gridValues[i][j])) {
-                            return false;
+                            const cell = document.getElementById(`cell-${i}-${j}`);
+                            cell.style.backgroundColor = "red";
+                            duplicateFound = true;
+                        } else {
+                            boxSet.add(gridValues[i][j]);
                         }
-                        boxSet.add(gridValues[i][j]);
                     }
                 }
             }
         }
     }
 
-    return true;
+    return !duplicateFound;
 }
 
 function resetGame() {
