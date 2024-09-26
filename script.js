@@ -210,3 +210,192 @@ document.addEventListener('DOMContentLoaded', function () {
 
     createGrid();
 })
+
+function checkForCompletion() {
+    let allFilled = true;
+
+
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            const cellId = `cell-${row}-${col}`;
+            const cell = document.getElementById(cellId);
+            if (!cell.value) {  // If any cell is empty
+                allFilled = false;
+                break;
+            }
+        }
+    }
+
+    if (allFilled && !checkForDuplicates()) {
+        alert("Congratulations! You've completed the Sudoku puzzle!");
+    }
+}
+
+function checkForDuplicates() {
+    let gridValues = [];
+    let hasDuplicates = false;
+
+    for (let row = 0; row < 9; row++) {
+        gridValues[row] = [];
+        for (let col = 0; col < 9; col++) {
+            const cellId = `cell-${row}-${col}`;
+            const cell = document.getElementById(cellId);
+            const value = parseInt(cell.value) || null;
+            gridValues[row][col] = value;
+        }
+    }
+
+    let duplicateCells = new Set();
+
+    for (let i = 0; i < 9; i++) {
+        const rowSet = new Map();
+        const colSet = new Map();
+        for (let j = 0; j < 9; j++) {
+            if (gridValues[i][j]) {
+                if (rowSet.has(gridValues[i][j])) {
+                    duplicateCells.add(`cell-${i}-${j}`);
+                    duplicateCells.add(`cell-${i}-${rowSet.get(gridValues[i][j])}`);
+                    hasDuplicates = true;
+                    rowSet.set(gridValues[i][j], j);
+                }
+            }
+            if (gridValues[j][i]) {
+                if (colSet.has(gridValues[j][i])) {
+                    duplicateCells.add(`cell-${j}-${i}`);
+                    duplicateCells.add(`cell-${colSet.get(gridValues[j][i])}-${i}`);
+                    hasDuplicates = true;
+                } else {
+                    colSet.set(gridValues[j][i], j);
+                }
+            }
+        }
+    }
+
+    for (let row = 0; row < 9; row += 3) {
+        for (let col = 0; col < 9; col += 3) {
+            const boxSet = new Map();
+            for (let i = row; i < row + 3; i++) {
+                for (let j = col; j < col + 3; j++) {
+                    if (gridValues[i][j]) {
+                        if (boxSet.has(gridValues[i][j])) {
+                            duplicateCells.add(`cell-${i}-${j}`);
+                            duplicateCells.add(`cell-${boxSet.get(gridValues[i][j])[0]}-${boxSet.get(gridValues[i][j])[1]}`);
+                            hasDuplicates = true;
+                        } else {
+                            boxSet.set(gridValues[i][j], [i, j]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    duplicateCells.forEach(cellId => {
+        const cell = document.getElementById(cellId);
+        cell.style.backgroundColor = 'red';
+    });
+
+    return hasDuplicates;
+}
+
+function clearErrorHighlighting() {
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            const cellId = `cell-${row}-${col}`;
+            const cell = document.getElementById(cellId);
+            cell.style.backgroundColor = '';
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const grid = document.getElementById('sudoku-grid');
+
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            const cellId = `cell-${row}-${col}`;
+            const cell = document.getElementById(cellId);
+
+            if (!cell.readOnly) {
+                cell.addEventListener('input', function () {
+                    const value = cell.value;
+                    if (!/^[1-9]$/.test(value)) {
+                        cell.value = '';
+                    }
+
+                    clearErrorHighlighting();
+                    checkForDuplicates();
+                    checkForCompletion();
+                });
+            }
+        }
+    }
+});
+function checkForDuplicates() {
+    let gridValues = [];
+    let hasDuplicates = false;
+
+    for (let row = 0; row < 9; row++) {
+        gridValues[row] = [];
+        for (let col = 0; col < 9; col++) {
+            const cellId = `cell-${row}-${col}`;
+            const cell = document.getElementById(cellId);
+            const value = parseInt(cell.value) || null;
+            gridValues[row][col] = value;
+        }
+    }
+
+    let duplicateCells = new Set();
+
+    for (let i = 0; i < 9; i++) {
+        const rowSet = new Map();
+        const colSet = new Map();
+        for (let j = 0; j < 9; j++) {
+            if (gridValues[i][j]) {
+                if (rowSet.has(gridValues[i][j])) {
+                    duplicateCells.add(`cell-${i}-${j}`);
+                    duplicateCells.add(`cell-${i}-${rowSet.get(gridValues[i][j])}`);
+                    hasDuplicates = true;
+                } else {
+                    rowSet.set(gridValues[i][j], j);
+                }
+            }
+            if (gridValues[j][i]) {
+                if (colSet.has(gridValues[j][i])) {
+                    duplicateCells.add(`cell-${j}-${i}`);
+                    duplicateCells.add(`cell-${colSet.get(gridValues[j][i])}-${i}`);
+                    hasDuplicates = true;
+                } else {
+                    colSet.set(gridValues[j][i], j);
+                }
+            }
+        }
+    }
+
+    for (let row = 0; row < 9; row += 3) {
+        for (let col = 0; col < 9; col += 3) {
+            const boxSet = new Map();
+            for (let i = row; i < row + 3; i++) {
+                for (let j = col; j < col + 3; j++) {
+                    if (gridValues[i][j]) {
+                        if (boxSet.has(gridValues[i][j])) {
+                            duplicateCells.add(`cell-${i}-${j}`);
+                            duplicateCells.add(`cell-${boxSet.get(gridValues[i][j])[0]}-${boxSet.get(gridValues[i][j])[1]}`);
+                            hasDuplicates = true;
+                        } else {
+                            boxSet.set(gridValues[i][j], [i, j]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    duplicateCells.forEach(cellId => {
+        const cell = document.getElementById(cellId);
+        cell.style.backgroundColor = 'red';
+    });
+
+    return hasDuplicates;
+}
+
