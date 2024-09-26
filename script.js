@@ -1,14 +1,3 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const resetButton = document.getElementById('reset-game');
-
-    resetButton.addEventListener('click', function () {
-        resetGame();
-    });
-
-
-    createGrid();
-});
-
 function createGrid() {
     const grid = document.getElementById('sudoku-grid');
     grid.innerHTML = '';
@@ -67,7 +56,6 @@ function clearErrorHighlighting() {
 function checkForDuplicates() {
     let gridValues = [];
 
-
     for (let row = 0; row < 9; row++) {
         gridValues[row] = [];
         for (let col = 0; col < 9; col++) {
@@ -78,30 +66,31 @@ function checkForDuplicates() {
         }
     }
 
-    for (let i = 0; i < 9; i++) {
-        const rowSet = new Set();
-        const colSet = new Set();
-        for (let j = 0; j < 9; j++) {
+    let duplicateCells = new Set();
 
+    for (let i = 0; i < 9; i++) {
+        const rowSet = new Map();
+        for (let j = 0; j < 9; j++) {
             if (gridValues[i][j]) {
                 if (rowSet.has(gridValues[i][j])) {
-                    const cell = document.getElementById(`cell-${i}-${j}`);
-
-                    cell.style.backgroundColor = 'red';
-
+                    duplicateCells.add(`cell-${i}-${j}`);
+                    duplicateCells.add(`cell-${i}-${rowSet.get(gridValues[i][j])}`);
                 } else {
-                    rowSet.add(gridValues[i][j]);
+                    rowSet.set(gridValues[i][j], j);
                 }
             }
+        }
+    }
 
+    for (let i = 0; i < 9; i++) {
+        const colSet = new Map();
+        for (let j = 0; j < 9; j++) {
             if (gridValues[j][i]) {
                 if (colSet.has(gridValues[j][i])) {
-                    const cell = document.getElementById(`cell-${j}-${i}`);
-
-                    cell.style.backgroundColor = 'red';
-
+                    duplicateCells.add(`cell-${j}-${i}`);
+                    duplicateCells.add(`cell-${colSet.get(gridValues[j][i])}-${i}`);
                 } else {
-                    colSet.add(gridValues[j][i]);
+                    colSet.set(gridValues[j][i], j);
                 }
             }
         }
@@ -109,25 +98,27 @@ function checkForDuplicates() {
 
     for (let row = 0; row < 9; row += 3) {
         for (let col = 0; col < 9; col += 3) {
-            const boxSet = new Set();
+            const boxSet = new Map();
             for (let i = row; i < row + 3; i++) {
                 for (let j = col; j < col + 3; j++) {
                     if (gridValues[i][j]) {
                         if (boxSet.has(gridValues[i][j])) {
-                            const cell = document.getElementById(`cel-${i}-${j}`);
-
-                            cell.style.backgroundColor = 'red';
-
+                            duplicateCells.add(`cell-${i}-${j}`);
+                            duplicateCells.add(`cell-${boxSet.get(gridValues[i][j])[0]}-${boxSet.get(gridValues[i][j])[1]}`);
                         } else {
-                            boxSet.add(gridValues[i][j]);
+                            boxSet.set(gridValues[i][j], [i, j]);
                         }
                     }
                 }
             }
         }
     }
-}
 
+    duplicateCells.forEach(cellId => {
+        const cell = document.getElementById(cellId);
+        cell.style.backgroundColor = 'red';
+    });
+}
 
 
 function isValid() {
@@ -200,9 +191,22 @@ function resetGame() {
         for (let col = 0; col < 9; col++) {
             const cellId = `cell-${row}-${col}`;
             const cell = document.getElementById(cellId);
+
             if (!cell.readOnly) {
                 cell.value = '';
+                cell.style.backgroundColor = '';
             }
         }
     }
+    clearErrorHighlighting();
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const resetButton = document.getElementById('reset-game');
+
+    resetButton.addEventListener('click', function () {
+        resetGame();
+    });
+
+    createGrid();
+})
