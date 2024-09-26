@@ -1,18 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     const newGameButton = document.getElementById('new-game');
-    const checkButton = document.getElementById('check-solutions');
     const resetButton = document.getElementById('reset-game');
 
     newGameButton.addEventListener('click', function () {
-        console.log('New Game button clicked!');
-    });
 
-    checkButton.addEventListener('click', function () {
-        if (isValid()) {
-            alert('No duplicates found! Keep going!');
-        } else {
-            alert('There are duplicates in your solution.');
-        }
     });
 
     resetButton.addEventListener('click', function () {
@@ -56,6 +47,7 @@ function createGrid() {
                     if (!/^[1-9]$/.test(value)) {
                         cell.value = '';
                     }
+
                     clearErrorHighlighting();
                     checkForDuplicates();
                 });
@@ -67,6 +59,7 @@ function createGrid() {
 }
 
 function clearErrorHighlighting() {
+
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             const cellId = `cell-${row}-${col}`;
@@ -78,6 +71,7 @@ function clearErrorHighlighting() {
 
 function checkForDuplicates() {
     let gridValues = [];
+
 
     for (let row = 0; row < 9; row++) {
         gridValues[row] = [];
@@ -93,25 +87,31 @@ function checkForDuplicates() {
         const rowSet = new Set();
         const colSet = new Set();
         for (let j = 0; j < 9; j++) {
+
             if (gridValues[i][j]) {
-                if (rowSet.had(gridValues[i][j])) {
+                if (rowSet.has(gridValues[i][j])) {
                     const cell = document.getElementById(`cell-${i}-${j}`);
-                    cell.style.backgroundColor = "red";
+
+                    cell.style.backgroundColor = 'red';
+
                 } else {
-                    rowSet.add(gridValues);
+                    rowSet.add(gridValues[i][j]);
                 }
             }
 
-            if (gridValues) {
+            if (gridValues[j][i]) {
                 if (colSet.has(gridValues[j][i])) {
                     const cell = document.getElementById(`cell-${j}-${i}`);
-                    cell.style.backgroundColor = "red";
+
+                    cell.style.backgroundColor = 'red';
+
                 } else {
                     colSet.add(gridValues[j][i]);
                 }
             }
         }
     }
+
     for (let row = 0; row < 9; row += 3) {
         for (let col = 0; col < 9; col += 3) {
             const boxSet = new Set();
@@ -120,7 +120,9 @@ function checkForDuplicates() {
                     if (gridValues[i][j]) {
                         if (boxSet.has(gridValues[i][j])) {
                             const cell = document.getElementById(`cel-${i}-${j}`);
-                            cell.style.backgroundColor = "red";
+
+                            cell.style.backgroundColor = 'red';
+
                         } else {
                             boxSet.add(gridValues[i][j]);
                         }
