@@ -1,10 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const newGameButton = document.getElementById('new-game');
     const resetButton = document.getElementById('reset-game');
-
-    newGameButton.addEventListener('click', function () {
-
-    });
 
     resetButton.addEventListener('click', function () {
         resetGame();
