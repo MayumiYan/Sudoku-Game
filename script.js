@@ -56,6 +56,8 @@ function createGrid() {
                     if (!/^[1-9]$/.test(value)) {
                         cell.value = '';
                     }
+                    clearErrorHighlighting();
+                    checkForDuplicates();
                 });
             }
 
@@ -63,6 +65,73 @@ function createGrid() {
         }
     }
 }
+
+function clearErrorHighlighting() {
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            const cellId = `cell-${row}-${col}`;
+            const cell = document.getElementById(cellId);
+            cell.style.backgroundColor = '';
+        }
+    }
+}
+
+function checkForDuplicates() {
+    let gridValues = [];
+
+    for (let row = 0; row < 9; row++) {
+        gridValues[row] = [];
+        for (let col = 0; col < 9; col++) {
+            const cellId = `cell-${row}-${col}`;
+            const cell = document.getElementById(cellId);
+            const value = parseInt(cell.value) || null;
+            gridValues[row][col] = value;
+        }
+    }
+
+    for (let i = 0; i < 9; i++) {
+        const rowSet = new Set();
+        const colSet = new Set();
+        for (let j = 0; j < 9; j++) {
+            if (gridValues[i][j]) {
+                if (rowSet.had(gridValues[i][j])) {
+                    const cell = document.getElementById(`cell-${i}-${j}`);
+                    cell.style.backgroundColor = "red";
+                } else {
+                    rowSet.add(gridValues);
+                }
+            }
+
+            if (gridValues) {
+                if (colSet.has(gridValues[j][i])) {
+                    const cell = document.getElementById(`cell-${j}-${i}`);
+                    cell.style.backgroundColor = "red";
+                } else {
+                    colSet.add(gridValues[j][i]);
+                }
+            }
+        }
+    }
+    for (let row = 0; row < 9; row += 3) {
+        for (let col = 0; col < 9; col += 3) {
+            const boxSet = new Set();
+            for (let i = row; i < row + 3; i++) {
+                for (let j = col; j < col + 3; j++) {
+                    if (gridValues[i][j]) {
+                        if (boxSet.has(gridValues[i][j])) {
+                            const cell = document.getElementById(`cel-${i}-${j}`);
+                            cell.style.backgroundColor = "red";
+                        } else {
+                            boxSet.add(gridValues[i][j]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 function isValid() {
     let gridValues = [];
