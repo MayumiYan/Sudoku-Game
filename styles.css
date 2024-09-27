@@ -58,3 +58,42 @@ h1 {
 .cell:nth-child(n+73):nth-child(-n+81) {
     border-bottom: 3px solid rgb(223, 156, 236);
 }
+
+/* Pixel-style button */
+.pixel-button {
+    background-color: #ff66b2; /* Bright pink */
+    border: 3px solid #d14787; /* Darker pink border for the pixel look */
+    color: white;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-family: 'Press Start 2P', cursive; /* Pixelated font */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    box-shadow: 0px 8px #d14787; /* Shadow for a raised effect */
+    border-radius: 0; /* Keep it square for pixel effect */
+}
+
+/* Hover effect for the button */
+.pixel-button:hover {
+    background-color: #ff99cc; /* Lighter pink on hover */
+    border-color: #d14787;
+    box-shadow: 0px 4px #d14787; /* Simulate button press by reducing shadow */
+}
+
+/* Pressed (active) state */
+.pixel-button:active {
+    background-color: #ff99cc; /* Same as hover for now */
+    box-shadow: none; /* Remove shadow on click for a "pressed" effect */
+    transform: translateY(4px); /* Push down slightly on click */
+}
+
+/* Optional: Add a pixelated border effect */
+.pixel-button {
+    image-rendering: pixelated; /* Forces pixel rendering */
+    border-radius: 0px; /* Removes any rounding */
+}
+
